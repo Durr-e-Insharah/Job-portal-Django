@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>My Posted Jobs</h1>
+{% for job in my_jobs %}
+    <div class="job-card">
+        <h3><a href="{% url 'job_detail' job.pk %}">{{ job.title }}</a></h3>
+        <p>{{ job.company }} — {{ job.location }} — ₹{{ job.salary }}</p>
+    </div>
+{% empty %}
+    <p class="empty-state">You haven't posted any jobs.</p>
+{% endfor %}
+{% endblock %}

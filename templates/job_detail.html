@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="job-detail">
+    <h1>{{ job.title }}</h1>
+    <p class="meta">{{ job.company }} — {{ job.location }} — ₹{{ job.salary }}</p>
+    <p>{{ job.description }}</p>
+    <p style="color: var(--text-muted);">Posted by: {{ job.posted_by }}</p>
+    <div class="actions">
+        {% if user.is_authenticated and user.role == 'seeker' %}
+            {% if already_applied %}
+                <span class="btn" style="background-color:#555;">Already Applied</span>
+            {% else %}
+                <a href="{% url 'apply_job' job.pk %}" class="btn">Apply Now</a>
+            {% endif %}
+        {% endif %}
+        {% if user == job.posted_by %}
+            <a href="{% url 'job_update' job.pk %}" class="btn btn-gold">Edit</a>
+            <a href="{% url 'job_delete' job.pk %}" class="btn" style="background-color:#8b0000;">Delete</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

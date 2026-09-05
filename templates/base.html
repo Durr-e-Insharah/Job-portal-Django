@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Job Portal</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<nav>
+    <span class="brand">JobPortal</span>
+    <a href="{% url 'job_list' %}">Home</a>
+    {% if user.is_authenticated %}
+        {% if user.role == 'employer' %}
+            <a href="{% url 'job_create' %}">Post Job</a>
+            <a href="{% url 'my_jobs' %}">My Jobs</a>
+        {% else %}
+            <a href="{% url 'my_applications' %}">My Applications</a>
+        {% endif %}
+        <form action="{% url 'logout' %}" method="post" class="logout-form">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+    {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'signup' %}" class="btn btn-gold">Sign Up</a>
+    {% endif %}
+</nav>
+<div class="container">
+{% block content %}{% endblock %}
+</div>
+</body>
+</html>
