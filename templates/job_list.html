@@ -4,7 +4,7 @@
 {% for job in all_jobs %}
     <div class="job-card">
         <h3><a href="{% url 'job_detail' job.pk %}">{{ job.title }}</a></h3>
-        <p>{{ job.company }} — {{ job.location }} — ₹{{ job.salary }}</p>
+        <p>{{ job.company }} — {{ job.location }} — Rs{{ job.salary }} — Deadline: {{ job.deadline }}</p>
     </div>
 {% empty %}
     <p class="empty-state">No jobs posted yet.</p>

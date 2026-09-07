@@ -2,7 +2,7 @@
 {% block content %}
 <div class="job-detail">
     <h1>{{ job.title }}</h1>
-    <p class="meta">{{ job.company }} — {{ job.location }} — ₹{{ job.salary }}</p>
+    <p class="meta">{{ job.company }} — {{ job.location }} — Rs{{ job.salary }} — Apply by: {{ job.deadline }}</p>
     <p>{{ job.description }}</p>
     <p style="color: var(--text-muted);">Posted by: {{ job.posted_by }}</p>
     <div class="actions">

@@ -8,6 +8,7 @@ class Job(models.Model):
     company = models.CharField(max_length=200)
     location = models.CharField(max_length=100)
     salary = models.DecimalField(max_digits=10, decimal_places=2)
+    deadline = models.DateField()
     posted_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -27,4 +28,4 @@ class Application(models.Model):
         unique_together = ('job', 'applicant')
 
     def __str__(self):
-        return f"{self.applicant} applied to{self.job}"
+        return f"{self.applicant} applied to {self.job}"

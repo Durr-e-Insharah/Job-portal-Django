@@ -3,7 +3,7 @@ from django.contrib import admin
 from .models import Job, Application
 
 class JobAdmin(admin.ModelAdmin):
-    list_display = ['title', 'company', 'location', 'salary', 'posted_by', 'created_at']
+    list_display = ['title', 'company', 'location', 'salary', 'deadline', 'posted_by', 'created_at']
     list_filter = ['company', 'location']
     search_fields = ['title', 'company']
 
