@@ -1,10 +1,10 @@
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .models import Job, Application
-from .forms import JobForm
+from .forms import JobForm, ApplicationForm
 
 
 class JobListView(ListView):
@@ -71,8 +71,22 @@ class MyJobsListView(LoginRequiredMixin, ListView):
 @login_required
 def apply_job(request, pk):
     job = get_object_or_404(Job, pk=pk)
-    Application.objects.get_or_create(job=job, applicant=request.user)
-    return redirect('job_detail', pk=pk)
+
+    if Application.objects.filter(job=job, applicant=request.user).exists():
+        return redirect('job_detail', pk=pk)
+
+    if request.method == 'POST':
+        form = ApplicationForm(request.POST, request.FILES)
+        if form.is_valid():
+            application = form.save(commit=False)
+            application.job = job
+            application.applicant = request.user
+            application.save()
+            return redirect('job_detail', pk=pk)
+    else:
+        form = ApplicationForm()
+
+    return render(request, 'apply_job.html', {'form': form, 'job': job})
 
 
 class MyApplicationsListView(LoginRequiredMixin, ListView):
@@ -82,3 +96,21 @@ class MyApplicationsListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Application.objects.filter(applicant=self.request.user)
+
+
+class JobApplicantsListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    model = Application
+    template_name = 'job_applicants.html'
+    context_object_name = 'applicants'
+
+    def test_func(self):
+        self.job = get_object_or_404(Job, pk=self.kwargs['pk'])
+        return self.job.posted_by == self.request.user
+
+    def get_queryset(self):
+        return Application.objects.filter(job=self.job)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['job'] = self.job
+        return context

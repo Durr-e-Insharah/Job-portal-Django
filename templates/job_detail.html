@@ -14,6 +14,7 @@
             {% endif %}
         {% endif %}
         {% if user == job.posted_by %}
+            <a href="{% url 'job_applicants' job.pk %}" class="btn">View Applicants</a>
             <a href="{% url 'job_update' job.pk %}" class="btn btn-gold">Edit</a>
             <a href="{% url 'job_delete' job.pk %}" class="btn" style="background-color:#8b0000;">Delete</a>
         {% endif %}

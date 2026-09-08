@@ -22,6 +22,17 @@ class Job(models.Model):
 class Application(models.Model):
     job = models.ForeignKey(Job, on_delete=models.CASCADE)
     applicant = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    full_name = models.CharField(max_length=200)
+    father_name = models.CharField(max_length=200)
+    email = models.EmailField()
+    contact_number = models.CharField(max_length=20)
+    date_of_birth = models.DateField()
+    address = models.TextField()
+
+    resume = models.FileField(upload_to='resumes/')
+    cover_letter = models.TextField(help_text="Maximum 250 words")
+
     applied_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
